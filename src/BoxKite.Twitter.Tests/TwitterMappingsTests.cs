@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reactive;
+using System.Threading.Tasks;
 using BoxKite.Twitter.Extensions;
 using BoxKite.Twitter.Mappings;
 using BoxKite.Twitter.Models;
@@ -10,7 +11,7 @@ using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 namespace BoxKite.Twitter.Tests
 {
     [TestClass]
-    public class TwitterMappingsTests : BaseContext
+    public class TwitterMappingsTests
     {
         readonly TestScheduler sched = new TestScheduler();
         readonly Func<Tweet, bool> isDateTimeSet = t => t.Time != DateTimeOffset.MinValue;
@@ -18,7 +19,7 @@ namespace BoxKite.Twitter.Tests
         [TestMethod]
         public void FromSearchResponse_UsingSampleData_CanBeParsed()
         {
-            var task = GetTestData(@"data\searchresponse.txt");
+            var task = Json.FromFile(@"data\searchresponse.txt");
             task.Wait();
             var contents = task.Result;
 
@@ -28,7 +29,7 @@ namespace BoxKite.Twitter.Tests
         [TestMethod]
         public void FromSearchResponse_UsingSampleData_PopulatesDates()
         {
-            var task = GetTestData(@"data\searchresponse.txt");
+            var task = Json.FromFile(@"data\searchresponse.txt");
             task.Wait();
             var contents = task.Result;
             var results = contents.FromSearchResponse();
@@ -39,7 +40,7 @@ namespace BoxKite.Twitter.Tests
         [TestMethod]
         public void FromTweet_UsingSampleData_CanBeParsed()
         {
-            var task = GetTestData(@"data\timeline.txt");
+            var task = Json.FromFile(@"data\timeline.txt");
             task.Wait();
             var contents = task.Result;
 
@@ -49,15 +50,13 @@ namespace BoxKite.Twitter.Tests
         }
 
         [TestMethod]
-        public void FromTweet_UsingSampleData_PopulatesDates()
+        public async Task FromTweet_UsingSampleData_PopulatesDates()
         {
-            var task = GetTestData(@"data\timeline.txt");
-            task.Wait();
-            var contents = task.Result;
+            var task = await Json.FromFile(@"data\timeline.txt");
+            
+            var observer = sched.Start(task.GetList);
 
-            var observer = sched.Start(contents.GetList);
-
-            var itemsReceieved = observer.GetNotificationsOfType(NotificationKind.OnNext);
+            var itemsReceieved = observer.GetMessagesOfType(NotificationKind.OnNext);
 
             Assert.IsTrue(itemsReceieved.All(m => isDateTimeSet(m.Value.Value)));
         }
@@ -65,7 +64,7 @@ namespace BoxKite.Twitter.Tests
         [TestMethod]
         public void Deserialize_SingleTweet_PopulatesFields()
         {
-            var task = GetTestData(@"data\sampletweet.txt");
+            var task = Json.FromFile(@"data\sampletweet.txt");
             task.Wait();
             var contents = task.Result;
             var tweet = contents.GetSingle();
@@ -78,7 +77,7 @@ namespace BoxKite.Twitter.Tests
         [TestMethod]
         public void Deserialize_SingleTweet_DecodesText()
         {
-            var task = GetTestData(@"data\sampletweet-withencoding.txt");
+            var task = Json.FromFile(@"data\sampletweet-withencoding.txt");
             task.Wait();
             var contents = task.Result;
             var tweet = contents.GetSingle();
@@ -89,7 +88,7 @@ namespace BoxKite.Twitter.Tests
         [TestMethod]
         public void Deserialize_SingleTweet_DecodesLessThanAndGreaterThan()
         {
-            var task = GetTestData(@"data\sampletweet-withencoding-2.txt");
+            var task = Json.FromFile(@"data\sampletweet-withencoding-2.txt");
             task.Wait();
             var contents = task.Result;
             var tweet = contents.GetSingle();
@@ -101,7 +100,7 @@ namespace BoxKite.Twitter.Tests
         public void Deserialize_Retweet_PopulatesFields()
         {
             // @hhariri retweets @wilderminds
-            var task = GetTestData(@"data\retweet.txt");
+            var task = Json.FromFile(@"data\retweet.txt");
             task.Wait();
             var contents = task.Result;
 
@@ -131,7 +130,7 @@ namespace BoxKite.Twitter.Tests
         [TestMethod]
         public void Deserialize_TweetWithEntityField_SpecifiesHashtag()
         {
-            var task = GetTestData(@"data\entity-with-hashtag.txt");
+            var task = Json.FromFile(@"data\entity-with-hashtag.txt");
             task.Wait();
             var contents = task.Result;
 
@@ -145,7 +144,7 @@ namespace BoxKite.Twitter.Tests
         [TestMethod]
         public void Deserialize_TweetWithEntityField_SpecifiesUserMentions()
         {
-            var task = GetTestData(@"data\entity-with-mentions.txt");
+            var task = Json.FromFile(@"data\entity-with-mentions.txt");
             task.Wait();
             var contents = task.Result;
 

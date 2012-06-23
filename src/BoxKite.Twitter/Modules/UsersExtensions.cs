@@ -39,7 +39,6 @@ namespace BoxKite.Twitter.Modules
             return text.GetSingleUser();
         }
 
-
         public static IObservable<User> GetProfile(this IUserSession session, long id)
         {
             var parameters = new SortedDictionary<string, string>

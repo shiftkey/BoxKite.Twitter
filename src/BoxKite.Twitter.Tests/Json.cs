@@ -1,19 +1,21 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
+using Windows.Storage;
 
 namespace BoxKite.Twitter.Tests
 {
-    public class BaseContext
+    public static class Json
     {
-        public static async Task<string> GetTestData(string filePath)
+        public static async Task<string> FromFile(string path)
         {
             var folder = Package.Current.InstalledLocation;
-            var file = await folder.GetFileAsync(filePath);
+            var filePath = Path.Combine(folder.Path, path);
+            var file = await StorageFile.GetFileFromPathAsync(filePath);
             var openFile = await file.OpenReadAsync();
             var reader = new StreamReader(openFile.AsStreamForRead());
-            return  await reader.ReadToEndAsync();
+            return await reader.ReadToEndAsync();
         }
     }
 }
