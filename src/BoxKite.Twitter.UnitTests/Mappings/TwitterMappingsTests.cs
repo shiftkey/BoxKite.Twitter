@@ -72,6 +72,7 @@ namespace BoxKite.Twitter.Tests.Mappings
             Assert.IsNotNull(tweet);
             Assert.IsTrue(tweet.User != null);
             Assert.IsTrue(tweet.Time != DateTimeOffset.MinValue);
+            Assert.IsFalse(tweet.Favourited);
         }
 
         [TestMethod]
@@ -109,6 +110,7 @@ namespace BoxKite.Twitter.Tests.Mappings
             Assert.IsNotNull(tweet);
             Assert.IsTrue(tweet.User.Name == "Wilder Minds");
             Assert.IsTrue(tweet.RetweetedBy.Name == "Hadi Hariri");
+            Assert.IsTrue(tweet.Favourited);
         }
 
         [TestMethod]

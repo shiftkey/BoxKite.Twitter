@@ -5,45 +5,22 @@ namespace BoxKite.Twitter.Models
 {
     public class Tweet : Synchronizable
     {
-        private string text;
-        public string Text
-        {
-            get { return text; }
-            set { SetProperty(ref text, value); }
-        }
+        public string Text { get; set; }
 
-        private DateTimeOffset date;
-        public DateTimeOffset Time
-        {
-            get { return date; }
-            set { SetProperty(ref date, value); }
-        }
+        public DateTimeOffset Time { get; set; }
 
         public string FriendlyTime
         {
             get { return Time.ToFriendlyText(); }
         }
 
-        private string id;
-        public string Id
-        {
-            get { return id; }
-            set { SetProperty(ref id, value); }
-        }
+        public string Id { get; set; }
 
-        private User user;
-        public User User
-        {
-            get { return user; }
-            set { SetProperty(ref user, value); }
-        }
+        public User User { get; set; }
 
-        private User retweetedBy;
-        public User RetweetedBy
-        {
-            get { return retweetedBy; }
-            set { SetProperty(ref retweetedBy, value); }
-        }
+        public User RetweetedBy { get; set; }
+
+        public bool Favourited { get; set; }
 
         private Hashtag[] hashtags = new Hashtag[0];
         public Hashtag[] Hashtags

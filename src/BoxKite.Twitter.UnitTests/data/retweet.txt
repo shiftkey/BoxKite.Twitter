@@ -8,7 +8,7 @@
   "coordinates": null,
   "source": "\u003Ca href=\"http:\/\/www.tweetdeck.com\" rel=\"nofollow\"\u003ETweetDeck\u003C\/a\u003E",
   "in_reply_to_user_id_str": null,
-  "favorited": false,
+  "favorited": true,
   "contributors": null,
   "entities": {
       "media": [

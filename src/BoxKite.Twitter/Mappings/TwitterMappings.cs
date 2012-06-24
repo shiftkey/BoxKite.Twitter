@@ -131,6 +131,7 @@ namespace BoxKite.Twitter.Mappings
                                 Text = Decode(status.text),
                                 User = MapUser(status.user),
                                 Time = status.created_at.ToDateTimeOffset(),
+                                Favourited = o.favorited,
                                 RetweetedBy = MapUser(o.user)
                             };
             }
@@ -141,6 +142,7 @@ namespace BoxKite.Twitter.Mappings
                     Id = o.id_str,
                     Text = Decode(o.text),
                     User = MapUser(o.user),
+                    Favourited = o.favorited,
                     Time = o.created_at.ToDateTimeOffset()
                 };
             }
