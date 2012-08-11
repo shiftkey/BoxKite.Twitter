@@ -111,12 +111,12 @@
     <SDKReference Include="TestPlatform, Version=11.0" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Json.cs" />
+    <Compile Include="Helpers\Json.cs" />
+    <Compile Include="Mappings\TwitterMappingsTests.cs" />
     <Compile Include="Modules\TestableSession.cs" />
     <Compile Include="Modules\UsersExtensionsTests.cs" />
-    <Compile Include="ObservableExtensions.cs" />
+    <Compile Include="Helpers\ObservableExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TwitterMappingsTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -174,6 +174,7 @@
       <HintPath>..\packages\Rx-PlatformServices.2.0.20622-rc\lib\WinRT45\System.Reactive.PlatformServices.dll</HintPath>
     </Reference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '11.0' ">
     <VisualStudioVersion>11.0</VisualStudioVersion>
   </PropertyGroup>

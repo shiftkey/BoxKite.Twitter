@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
@@ -8,7 +8,7 @@ using BoxKite.Twitter.Models;
 using Microsoft.Reactive.Testing;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 
-namespace BoxKite.Twitter.Tests
+namespace BoxKite.Twitter.Tests.Mappings
 {
     [TestClass]
     public class TwitterMappingsTests
