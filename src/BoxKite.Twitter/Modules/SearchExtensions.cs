@@ -9,7 +9,9 @@ using BoxKite.Twitter.Extensions;
 using BoxKite.Twitter.Mappings;
 using BoxKite.Twitter.Models;
 
-namespace BoxKite.Twitter.Modules
+// ReSharper disable CheckNamespace
+namespace BoxKite.Twitter
+// ReSharper enable CheckNamespace
 {
     public static class SearchExtensions
     {

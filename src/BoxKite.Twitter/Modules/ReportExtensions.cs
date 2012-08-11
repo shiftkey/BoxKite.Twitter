@@ -8,8 +8,8 @@ using BoxKite.Twitter.Mappings;
 using BoxKite.Twitter.Models;
 
 // ReSharper disable CheckNamespace
-namespace BoxKite.Twitter.Modules
-// ReSharper restore CheckNamespace
+namespace BoxKite.Twitter
+// ReSharper enable CheckNamespace
 {
     public static class ReportExtensions
     {

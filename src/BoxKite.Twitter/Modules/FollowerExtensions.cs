@@ -9,7 +9,9 @@ using BoxKite.Twitter.Extensions;
 using BoxKite.Twitter.Models.Internal;
 using Newtonsoft.Json;
 
-namespace BoxKite.Twitter.Modules
+// ReSharper disable CheckNamespace
+namespace BoxKite.Twitter
+// ReSharper enable CheckNamespace
 {
     public static class FollowerExtensions
     {
