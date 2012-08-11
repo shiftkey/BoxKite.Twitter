@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoxKite.Twitter", "BoxKite.Twitter\BoxKite.Twitter.csproj", "{982F832C-29B8-4CDB-B269-7A420D26BBE3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoxKite.Twitter.UnitTests", "BoxKite.Twitter.Tests\BoxKite.Twitter.UnitTests.csproj", "{D99A2B1C-C789-4FD4-9838-3BC1BF80AFC6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoxKite.Twitter.UnitTests", "BoxKite.Twitter.UnitTests\BoxKite.Twitter.UnitTests.csproj", "{D99A2B1C-C789-4FD4-9838-3BC1BF80AFC6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
