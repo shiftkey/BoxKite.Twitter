@@ -156,9 +156,9 @@
     <Compile Include="Modules\FollowerExtensions.cs" />
     <Compile Include="Modules\ReportExtensions.cs" />
     <Compile Include="Modules\SearchExtensions.cs" />
-    <Compile Include="Modules\Streaming\IUserStream.cs" />
-    <Compile Include="Modules\Streaming\UserStream.cs" />
-    <Compile Include="Modules\Streaming\UserStreamExtensions.cs" />
+    <Compile Include="IUserStream.cs" />
+    <Compile Include="UserStream.cs" />
+    <Compile Include="Modules\UserStreamExtensions.cs" />
     <Compile Include="Modules\TimelineExtensions.cs" />
     <Compile Include="Modules\TweetExtensions.cs" />
     <Compile Include="Modules\UsersExtensions.cs" />
