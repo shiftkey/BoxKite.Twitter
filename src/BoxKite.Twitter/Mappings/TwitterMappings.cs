@@ -9,7 +9,7 @@ using BoxKite.Twitter.Models;
 using BoxKite.Twitter.Models.Internal;
 using Newtonsoft.Json;
 using Hashtag = BoxKite.Twitter.Models.Hashtag;
-using Tweet = BoxKite.Twitter.Models.Internal.Tweet;
+using Tweet = BoxKite.Twitter.Models.Tweet;
 using Url = BoxKite.Twitter.Models.Url;
 using User = BoxKite.Twitter.Models.User;
 
@@ -17,19 +17,19 @@ namespace BoxKite.Twitter.Mappings
 {
     public static class TwitterMappings
     {
-        public static IObservable<Models.Tweet> GetList(this string body)
+        public static IObservable<Tweet> GetList(this string body)
         {
-            List<Tweet> objects;
+            List<Models.Internal.Tweet> objects;
             try
             {
-                objects = JsonConvert.DeserializeObject<List<Tweet>>(body);
+                objects = JsonConvert.DeserializeObject<List<Models.Internal.Tweet>>(body);
             }
             catch (Exception)
             {
                 if (Debugger.IsAttached)
                     Debugger.Break();
 
-                return Observable.Empty<Models.Tweet>();
+                return Observable.Empty<Tweet>();
             }
 
             return objects.Select(MapFromInternalTweet).ToObservable();
@@ -57,8 +57,8 @@ namespace BoxKite.Twitter.Mappings
         {
             try
             {
-                List<DM> objects = JsonConvert.DeserializeObject<List<DM>>(body);
-                return objects.Select(MapFromInternalDM);
+                var objects = JsonConvert.DeserializeObject<List<DM>>(body);
+                return objects.Select(MapFromInternal);
             }
             catch (Exception)
             {
@@ -69,11 +69,11 @@ namespace BoxKite.Twitter.Mappings
             }
         }
 
-        public static Models.Tweet GetSingle(this string body)
+        public static Tweet GetSingle(this string body)
         {
             try
             {
-                var o = JsonConvert.DeserializeObject<Tweet>(body);
+                var o = JsonConvert.DeserializeObject<Models.Internal.Tweet>(body);
                 return MapFromInternalTweet(o);
             }
             catch (Exception)
@@ -85,7 +85,7 @@ namespace BoxKite.Twitter.Mappings
             }
         }
 
-        public static Models.User GetSingleUser(this string body)
+        public static User GetSingleUser(this string body)
         {
             try
             {
@@ -106,7 +106,7 @@ namespace BoxKite.Twitter.Mappings
             try
             {
                 var o = JsonConvert.DeserializeObject<DM>(body);
-                return MapFromInternalDM(o);
+                return MapFromInternal(o);
             }
             catch (Exception)
             {
@@ -117,15 +117,15 @@ namespace BoxKite.Twitter.Mappings
             }
         }
 
-        private static Models.Tweet MapFromInternalTweet(Tweet o)
+        private static Tweet MapFromInternalTweet(Models.Internal.Tweet o)
         {
-            Models.Tweet tweet;
+            Tweet tweet;
 
             if (o.retweeted_status != null)
             {
                 var status = o.retweeted_status;
 
-                tweet = new Models.Tweet
+                tweet = new Tweet
                             {
                                 Id = status.id_str,
                                 Text = Decode(status.text),
@@ -136,7 +136,7 @@ namespace BoxKite.Twitter.Mappings
             }
             else
             {
-                tweet = new Models.Tweet
+                tweet = new Tweet
                 {
                     Id = o.id_str,
                     Text = Decode(o.text),
@@ -176,7 +176,7 @@ namespace BoxKite.Twitter.Mappings
             return WebUtility.HtmlDecode(text);
         }
 
-        private static DirectMessage MapFromInternalDM(DM o)
+        private static DirectMessage MapFromInternal(DM o)
         {
             var tweet = new DirectMessage
         {
@@ -189,7 +189,7 @@ namespace BoxKite.Twitter.Mappings
             return tweet;
         }
 
-        private static Url[] MapUrls(Tweet tweet)
+        private static Url[] MapUrls(Models.Internal.Tweet tweet)
         {
             return tweet.entities.urls.Select(u => new Url
                                                 {
@@ -199,7 +199,7 @@ namespace BoxKite.Twitter.Mappings
                                                 }).ToArray();
         }
 
-        private static Media[] MapMedia(Tweet tweet)
+        private static Media[] MapMedia(Models.Internal.Tweet tweet)
         {
             return tweet.entities.media.Select(m => new Media
                                                         {
@@ -211,7 +211,7 @@ namespace BoxKite.Twitter.Mappings
                                                         }).ToArray();
         }
 
-        private static Mention[] MapMentions(Tweet tweet)
+        private static Mention[] MapMentions(Models.Internal.Tweet tweet)
         {
             return tweet.entities.user_mentions
                 .Select(u => new Mention
@@ -225,7 +225,7 @@ namespace BoxKite.Twitter.Mappings
                 ).ToArray();
         }
 
-        private static Hashtag[] MapHashtags(Tweet tweet)
+        private static Hashtag[] MapHashtags(Models.Internal.Tweet tweet)
         {
             return tweet.entities.hashtags
                 .Select(h => new Hashtag
@@ -236,11 +236,11 @@ namespace BoxKite.Twitter.Mappings
                 }).ToArray();
         }
 
-        public static IEnumerable<Models.Tweet> FromSearchResponse(this string body)
+        public static IEnumerable<Tweet> FromSearchResponse(this string body)
         {
             var result = JsonConvert.DeserializeObject<SearchResponse>(body);
 
-            return result.results.Select(c => new Models.Tweet
+            return result.results.Select(c => new Tweet
             {
                 Id = c.id_str,
                 Text = c.text,
