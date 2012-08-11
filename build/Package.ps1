@@ -6,7 +6,7 @@ properties {
     $OutputDir = "$BaseDir\Deploy\Package\"
     $ArtifactsDir = "$BaseDir\artifacts\"
     $NuGetPackDir = Join-Path "$OutputDir" "Pack\"
-    $BaseVersion = "0.1"
+    $BaseVersion = "0.1.0"
     $Version = "$BaseVersion-alpha" 
     $PatchNumber = (git rev-list --all | wc -l).trim() # TODO: better implementation
     $AssemblyVersion = "$BaseVersion.$PatchNumber"
@@ -93,7 +93,7 @@ task compile -depends clean,version  {
 
 task test -depends compile {
     $path = 'C:\Program Files (x86)\Microsoft Visual Studio 11.0\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe'
-    $appx = "$OutputDir\$Project.Tests\AppPackages\$Project.Tests_1.0.0.0_AnyCPU_Test\$Project.Tests_1.0.0.0_AnyCPU.appx"
+    $appx = "$OutputDir\$Project.UnitTests\AppPackages\$Project.UnitTests_1.0.0.0_AnyCPU_Test\$Project.UnitTests_1.0.0.0_AnyCPU.appx"
     if (Test-Path $path) {
         start-process $path -ArgumentList "$appx `/InIsolation" -NoNewWindow -Wait
     }
