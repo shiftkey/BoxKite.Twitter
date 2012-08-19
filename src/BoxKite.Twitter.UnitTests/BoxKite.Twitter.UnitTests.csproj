@@ -129,6 +129,7 @@
     <Content Include="data\entity-with-media.txt" />
     <Content Include="data\entity-with-mentions.txt" />
     <Content Include="data\entity-with-urls.txt" />
+    <Content Include="data\favorites\single.txt" />
     <Content Include="data\favorites\example.txt" />
     <Content Include="data\retweet.txt" />
     <Content Include="data\sampletweet-withencoding-2.txt" />

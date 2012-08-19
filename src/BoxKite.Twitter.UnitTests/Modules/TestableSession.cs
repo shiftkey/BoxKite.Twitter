@@ -11,6 +11,7 @@ namespace BoxKite.Twitter.Tests.Modules
         string contents;
         SortedDictionary<string, string> receviedParameters;
         string expectedGetUrl;
+        string expectedPostUrl;
 
         public Task<HttpResponseMessage> GetAsync(string relativeUrl, SortedDictionary<string, string> parameters)
         {
@@ -28,7 +29,16 @@ namespace BoxKite.Twitter.Tests.Modules
 
         public Task<HttpResponseMessage> PostAsync(string relativeUrl, SortedDictionary<string, string> parameters)
         {
-            throw new System.NotImplementedException();
+            if (!string.IsNullOrWhiteSpace(expectedPostUrl))
+            {
+                Assert.AreEqual(expectedPostUrl, relativeUrl);
+            }
+
+            this.receviedParameters = parameters;
+
+            var response = new HttpResponseMessage(HttpStatusCode.OK);
+            response.Content = new StringContent(contents);
+            return Task.FromResult(response);
         }
 
         public HttpRequestMessage CreateGet(string fullUrl, SortedDictionary<string, string> parameters)
@@ -53,6 +63,11 @@ namespace BoxKite.Twitter.Tests.Modules
         public void ExpectGet(string url)
         {
             expectedGetUrl = url;
+        }
+
+        public void ExpectPost(string url)
+        {
+            expectedPostUrl = url;
         }
     }
 }
