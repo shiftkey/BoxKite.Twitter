@@ -5,8 +5,12 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using BoxKite.Twitter.Models;
+#if !(NETFX_CORE || PORTABLE)
+
+#else
 using Windows.Security.Cryptography;
 using Windows.Security.Cryptography.Core;
+#endif
 
 namespace BoxKite.Twitter
 {
@@ -129,14 +133,15 @@ namespace BoxKite.Twitter
             baseString = baseString.Substring(0, baseString.Length - 3);
 
             var signingKey = Uri.EscapeDataString(credentials.ConsumerSecret) + "&" + Uri.EscapeDataString(credentials.TokenSecret);
-
+#if (NETFX_CORE || PORTABLE)
             var keyMaterial = CryptographicBuffer.ConvertStringToBinary(signingKey, BinaryStringEncoding.Utf8);
             var hmacSha1Provider = MacAlgorithmProvider.OpenAlgorithm("HMAC_SHA1");
             var macKey = hmacSha1Provider.CreateKey(keyMaterial);
             var dataToBeSigned = CryptographicBuffer.ConvertStringToBinary(baseString, BinaryStringEncoding.Utf8);
             var signatureBuffer = CryptographicEngine.Sign(macKey, dataToBeSigned);
             var signatureString = CryptographicBuffer.EncodeToBase64String(signatureBuffer);
-
+#else
+#endif
             return new OAuth
                        {
                            Nonce = oauthNonce,
