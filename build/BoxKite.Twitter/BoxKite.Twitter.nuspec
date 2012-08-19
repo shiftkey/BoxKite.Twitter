@@ -14,11 +14,11 @@
     <tags>WinRT Twitter BoxKite</tags>
     <dependencies>
     <dependency id="Newtonsoft.Json" version="4.5.7" />
-    <dependency id="Rx-Core" version="2.0.20622-rc" />
-    <dependency id="Rx-Interfaces" version="2.0.20622-rc" />
-    <dependency id="Rx-Linq" version="2.0.20622-rc" />
-    <dependency id="Rx-Main" version="2.0.20622-rc" />
-    <dependency id="Rx-PlatformServices" version="2.0.20622-rc" />
+    <dependency id="Rx-Core" version="2.0.20814" />
+    <dependency id="Rx-Interfaces" version="2.0.20814" />
+    <dependency id="Rx-Linq" version="2.0.20814" />
+    <dependency id="Rx-Main" version="2.0.20814" />
+    <dependency id="Rx-PlatformServices" version="2.0.20814" />
   </dependencies>
   </metadata>
 </package>

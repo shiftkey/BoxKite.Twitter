@@ -19,7 +19,7 @@ namespace BoxKite.Twitter.Tests.Modules
             session.Returns(await Json.FromFile("data\\favorites\\example.txt"));
             session.ExpectGet("https://api.twitter.com/1/favorites.json");
 
-            var favourites = session.GetFavourites().ToListObservable();
+            var favourites = await session.GetFavourites().ToList();
 
             Assert.IsTrue(favourites.Count > 0);
         }

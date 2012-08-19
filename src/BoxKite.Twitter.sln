@@ -5,6 +5,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoxKite.Twitter", "BoxKite.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoxKite.Twitter.UnitTests", "BoxKite.Twitter.UnitTests\BoxKite.Twitter.UnitTests.csproj", "{D99A2B1C-C789-4FD4-9838-3BC1BF80AFC6}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{92C99AEC-B601-4D61-8BC2-F14279FFA7BD}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\packages.config = .nuget\packages.config
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
