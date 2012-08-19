@@ -8,12 +8,13 @@ using System.Threading.Tasks;
 using BoxKite.Twitter.Extensions;
 using BoxKite.Twitter.Mappings;
 using BoxKite.Twitter.Models;
+using BoxKite.Twitter.Modules.Streaming;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace BoxKite.Twitter.Modules.Streaming
+namespace BoxKite.Twitter
 {
-    public class UserStream : IUserStream
+    internal class UserStream : IUserStream
     {
         readonly Func<Task<HttpResponseMessage>> createOpenConnection;
         readonly Subject<Tweet> tweets = new Subject<Tweet>();

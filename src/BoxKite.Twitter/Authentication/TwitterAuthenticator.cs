@@ -58,16 +58,16 @@ namespace BoxKite.Twitter.Authentication
             }
         }
 
-        public static async Task<TwitterCredentials> AuthenticateUser(string twitterClientId, string twitterCallbackUrl, string twitterClientSecret)
+        public static async Task<TwitterCredentials> AuthenticateUser(string twitterClientId, string twitterClientSecret, string twitterCallbackUrl)
         {
             if (string.IsNullOrWhiteSpace(twitterClientId))
                 throw new ArgumentException("TwitterClientID must be specified", twitterClientId);
 
-            if (string.IsNullOrWhiteSpace(twitterCallbackUrl))
-                throw new ArgumentException("TwitterCallbackUrl must be specified", twitterCallbackUrl);
-
             if (string.IsNullOrWhiteSpace(twitterClientSecret))
                 throw new ArgumentException("TwitterClientSecret must be specified", twitterClientSecret);
+
+            if (string.IsNullOrWhiteSpace(twitterCallbackUrl))
+                throw new ArgumentException("TwitterCallbackUrl must be specified", twitterCallbackUrl);
 
             var ts = DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0);
             var sinceEpoch = Convert.ToInt64(ts.TotalSeconds).ToString();
