@@ -9,7 +9,7 @@
     <projectUrl>http://github.com/shiftkey/BoxKite.Twitter/</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A Rx-based library for interacting with the Twitter API on Windows 8</description>
-    <releaseNotes>Centralising namespaces</releaseNotes>
+    <releaseNotes>Updated to latest release of Reactive Extensions v2</releaseNotes>
     <copyright>Copyright 2012</copyright>
     <tags>WinRT Twitter BoxKite</tags>
     <dependencies>
