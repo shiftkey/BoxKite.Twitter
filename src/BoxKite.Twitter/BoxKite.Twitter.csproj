@@ -153,6 +153,7 @@
     <Compile Include="Models\Url.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Modules\DirectMessageExtensions.cs" />
+    <Compile Include="Modules\FavouritesExtensions.cs" />
     <Compile Include="Modules\FollowerExtensions.cs" />
     <Compile Include="Modules\ReportExtensions.cs" />
     <Compile Include="Modules\SearchExtensions.cs" />

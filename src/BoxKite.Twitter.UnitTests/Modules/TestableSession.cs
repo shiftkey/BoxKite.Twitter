@@ -2,16 +2,23 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 
 namespace BoxKite.Twitter.Tests.Modules
 {
     public class TestableSession : IUserSession
     {
-        private string contents;
-        private SortedDictionary<string, string> receviedParameters;
+        string contents;
+        SortedDictionary<string, string> receviedParameters;
+        string expectedGetUrl;
 
         public Task<HttpResponseMessage> GetAsync(string relativeUrl, SortedDictionary<string, string> parameters)
         {
+            if (!string.IsNullOrWhiteSpace(expectedGetUrl))
+            {
+                Assert.AreEqual(expectedGetUrl, relativeUrl);
+            }
+
             this.receviedParameters = parameters;
 
             var response = new HttpResponseMessage(HttpStatusCode.OK);
@@ -41,6 +48,11 @@ namespace BoxKite.Twitter.Tests.Modules
 
             var actualValue = receviedParameters[key];
             return actualValue == value;
+        }
+
+        public void ExpectGet(string url)
+        {
+            expectedGetUrl = url;
         }
     }
 }
