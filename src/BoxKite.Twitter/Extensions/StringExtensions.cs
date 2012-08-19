@@ -42,5 +42,29 @@ namespace BoxKite.Twitter.Extensions
 
             return DateTimeOffset.MinValue;
         }
+
+        public static string UrlEncode(this string inputString)
+        {
+            var encoded = "";
+
+            foreach (var str in inputString)
+            {
+                if ((str >= 'A' && str <= 'Z') ||
+                    (str >= 'a' && str <= 'z') ||
+                    (str >= '0' && str <= '9'))
+                {
+                    encoded += str;
+                }
+                else if (str == '-' || str == '_' || str == '.' || str == '~')
+                {
+                    encoded += str;
+                }
+                else
+                {
+                    encoded += "%" + string.Format("{0:X}", (int)str);
+                }
+            }
+            return encoded;
+        }
     }
 }

@@ -192,9 +192,7 @@
       <HintPath>..\packages\Rx-PlatformServices.2.0.20814\lib\WinRT45\System.Reactive.PlatformServices.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Modules\Internal\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '11.0' ">
     <VisualStudioVersion>11.0</VisualStudioVersion>
   </PropertyGroup>

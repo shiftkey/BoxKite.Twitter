@@ -7,7 +7,7 @@
     <ProjectGuid>{09468A00-71F5-4406-A4C4-A6C7E491258F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BoxKite.Twitter45</RootNamespace>
+    <RootNamespace>BoxKite.Twitter</RootNamespace>
     <AssemblyName>BoxKite.Twitter45</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -228,12 +228,11 @@
     <Compile Include="..\BoxKite.Twitter\UserStream.cs">
       <Link>UserStream.cs</Link>
     </Compile>
+    <Compile Include="Authentication\OAuthBase.cs" />
     <Compile Include="Models\PropertyChangedBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Modules\Internal\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>

@@ -5,12 +5,15 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using BoxKite.Twitter.Extensions;
 using BoxKite.Twitter.Models;
 #if (NETFX_CORE || PORTABLE)
 using Windows.Security.Authentication.Web;
 using Windows.Security.Cryptography;
 using Windows.Security.Cryptography.Core;
 #else
+using System.Security.Cryptography;
+using System.Text;
 #endif
 
 namespace BoxKite.Twitter.Authentication
@@ -19,31 +22,6 @@ namespace BoxKite.Twitter.Authentication
     {
         const string OauthSignatureMethod = "HMAC-SHA1";
         const string OauthVersion = "1.0";
-
-        private static string UrlEncode(string toEncode)
-        {
-            var encoded = "";
-
-            for (var i = 0; i < toEncode.Length; i++)
-            {
-                var test = toEncode[i];
-                if ((test >= 'A' && test <= 'Z') ||
-                    (test >= 'a' && test <= 'z') ||
-                    (test >= '0' && test <= '9'))
-                {
-                    encoded += test;
-                }
-                else if (test == '-' || test == '_' || test == '.' || test == '~')
-                {
-                    encoded += test;
-                }
-                else
-                {
-                    encoded += "%" + string.Format("{0:X}", (int)test);
-                }
-            }
-            return encoded;
-        }
 
         private static async Task<string> PostData(string url, string data)
         {
@@ -61,52 +39,43 @@ namespace BoxKite.Twitter.Authentication
             }
         }
 
-        public static async Task<TwitterCredentials> AuthenticateUser(string twitterClientId, string twitterClientSecret, string twitterCallbackUrl)
+        public static async Task<TwitterCredentials> AuthenticateUser(string clientId, string clientSecret, string callbackUrl)
         {
-            if (string.IsNullOrWhiteSpace(twitterClientId))
-                throw new ArgumentException("TwitterClientID must be specified", twitterClientId);
+            if (string.IsNullOrWhiteSpace(clientId))
+                throw new ArgumentException("clientId must be specified", clientId);
 
-            if (string.IsNullOrWhiteSpace(twitterClientSecret))
-                throw new ArgumentException("TwitterClientSecret must be specified", twitterClientSecret);
+            if (string.IsNullOrWhiteSpace(clientSecret))
+                throw new ArgumentException("clientSecret must be specified", clientSecret);
 
-            if (string.IsNullOrWhiteSpace(twitterCallbackUrl))
-                throw new ArgumentException("TwitterCallbackUrl must be specified", twitterCallbackUrl);
+            if (string.IsNullOrWhiteSpace(callbackUrl))
+                throw new ArgumentException("callbackUrl must be specified", callbackUrl);
 
             var ts = DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0);
             var sinceEpoch = Convert.ToInt64(ts.TotalSeconds).ToString();
 
             var rand = new Random();
-            var twitterUrl = "https://api.twitter.com/oauth/request_token";
+            const string requestTokenUrl = "https://api.twitter.com/oauth/request_token";
             var nonce = rand.Next(1000000000);
 
             var sigBaseStringParams =
                 string.Format(
                     "oauth_callback={0}&oauth_consumer_key={1}&oauth_nonce={2}&oauth_signature_method=HMAC-SHA1&oauth_timestamp={3}&oauth_version=1.0",
-                    UrlEncode(twitterCallbackUrl),
-                    twitterClientId,
+                    callbackUrl.UrlEncode(),
+                    clientId,
                     nonce,
                     sinceEpoch);
 
-            var sigBaseString = string.Format("POST&{0}&{1}", UrlEncode(twitterUrl), UrlEncode(sigBaseStringParams));
-#if (NETFX_CORE || PORTABLE)
-            var keyMaterial = CryptographicBuffer.ConvertStringToBinary(twitterClientSecret + "&", BinaryStringEncoding.Utf8);
-            var hmacSha1Provider = MacAlgorithmProvider.OpenAlgorithm("HMAC_SHA1");
-            var macKey = hmacSha1Provider.CreateKey(keyMaterial);
-            var dataToBeSigned = CryptographicBuffer.ConvertStringToBinary(sigBaseString, BinaryStringEncoding.Utf8);
-            var signatureBuffer = CryptographicEngine.Sign(macKey, dataToBeSigned);
-            var signature = CryptographicBuffer.EncodeToBase64String(signatureBuffer);
-#else
-            var signature = string.Empty; // TODO
-#endif
+            var sigBaseString = string.Format("POST&{0}&{1}", requestTokenUrl.UrlEncode(), sigBaseStringParams.UrlEncode());
+            var signature = GenerateSignature(clientSecret, sigBaseString);
             var dataToPost = string.Format(
                     "OAuth oauth_callback=\"{0}\", oauth_consumer_key=\"{1}\", oauth_nonce=\"{2}\", oauth_signature_method=\"HMAC-SHA1\", oauth_timestamp=\"{3}\", oauth_version=\"1.0\", oauth_signature=\"{4}\"",
-                    UrlEncode(twitterCallbackUrl),
-                    twitterClientId,
+                    callbackUrl.UrlEncode(),
+                    clientId,
                     nonce,
                     sinceEpoch,
-                    UrlEncode(signature));
+                    signature.UrlEncode());
 
-            var response = await PostData(twitterUrl, dataToPost);
+            var response = await PostData(requestTokenUrl, dataToPost);
 
             if (string.IsNullOrWhiteSpace(response))
                 return TwitterCredentials.Null;
@@ -123,21 +92,7 @@ namespace BoxKite.Twitter.Authentication
                 }
             }
 
-            if (string.IsNullOrWhiteSpace(oauthToken))
-                return TwitterCredentials.Null;
-
-            twitterUrl = "https://api.twitter.com/oauth/authorize?oauth_token=" + oauthToken;
-            var startUri = new Uri(twitterUrl);
-            var endUri = new Uri(twitterCallbackUrl);
-#if (NETFX_CORE || PORTABLE)
-            var result = await WebAuthenticationBroker.AuthenticateAsync(WebAuthenticationOptions.None, startUri, endUri);
-            if (result.ResponseStatus != WebAuthenticationStatus.Success)
-                return TwitterCredentials.Null;
-            return await GetUserCredentials(twitterClientId, twitterClientSecret, result.ResponseData);
-#else
-            return TwitterCredentials.Null; // TODO
-#endif
-
+            return await DelegateAuthentication(clientId, clientSecret, callbackUrl, oauthToken);
         }
 
         private static async Task<TwitterCredentials> GetUserCredentials(string consumerKey, string consumerSecret, string responseText)
@@ -192,16 +147,7 @@ namespace BoxKite.Twitter.Authentication
             baseString = baseString.Substring(0, baseString.Length - 3);
 
             var signingKey = Uri.EscapeDataString(consumerSecret) + "&";
-#if (NETFX_CORE || PORTABLE)
-            var keyMaterial = CryptographicBuffer.ConvertStringToBinary(signingKey, BinaryStringEncoding.Utf8);
-            var hmacSha1Provider = MacAlgorithmProvider.OpenAlgorithm("HMAC_SHA1");
-            var macKey = hmacSha1Provider.CreateKey(keyMaterial);
-            var dataToBeSigned = CryptographicBuffer.ConvertStringToBinary(baseString, BinaryStringEncoding.Utf8);
-            var signatureBuffer = CryptographicEngine.Sign(macKey, dataToBeSigned);
-            var signatureString = CryptographicBuffer.EncodeToBase64String(signatureBuffer);
-#else
-            var signatureString = string.Empty; // TODO
-#endif
+            var signatureString = GenerateSignature(signingKey, baseString);
             var hwr = WebRequest.Create(url);
 
             var authorizationHeaderParams = string.Format(
@@ -246,7 +192,42 @@ namespace BoxKite.Twitter.Authentication
             credentials.Valid = true;
 
             return credentials;
-
         }
+
+        private static string GenerateSignature(string signingKey, string baseString)
+        {
+#if (NETFX_CORE || PORTABLE)
+            var keyMaterial = CryptographicBuffer.ConvertStringToBinary(signingKey, BinaryStringEncoding.Utf8);
+            var hmacSha1Provider = MacAlgorithmProvider.OpenAlgorithm("HMAC_SHA1");
+            var macKey = hmacSha1Provider.CreateKey(keyMaterial);
+            var dataToBeSigned = CryptographicBuffer.ConvertStringToBinary(baseString, BinaryStringEncoding.Utf8);
+            var signatureBuffer = CryptographicEngine.Sign(macKey, dataToBeSigned);
+            var signatureString = CryptographicBuffer.EncodeToBase64String(signatureBuffer);
+#else
+            var hmacsha1 = new HMACSHA1 { Key = Encoding.ASCII.GetBytes(signingKey) };
+            var dataBuffer = Encoding.ASCII.GetBytes(baseString);
+            var hashBytes = hmacsha1.ComputeHash(dataBuffer);
+            var signatureString = Convert.ToBase64String(hashBytes);
+#endif
+            return signatureString;
+        }
+
+        private static async Task<TwitterCredentials> DelegateAuthentication(string clientId, string clientSecret, string callbackUrl, string oauthToken)
+        {
+            if (string.IsNullOrWhiteSpace(oauthToken))
+                return TwitterCredentials.Null;
+
+#if (NETFX_CORE || PORTABLE)
+            var startUri = new Uri("https://api.twitter.com/oauth/authorize?oauth_token=" + oauthToken);
+            var endUri = new Uri(callbackUrl);
+            var result = await WebAuthenticationBroker.AuthenticateAsync(WebAuthenticationOptions.None, startUri, endUri);
+            if (result.ResponseStatus != WebAuthenticationStatus.Success)
+                return TwitterCredentials.Null;
+            return await GetUserCredentials(clientId, clientSecret, result.ResponseData);
+#else
+            return TwitterCredentials.Null; // TODO
+#endif
+        }
+
     }
 }
