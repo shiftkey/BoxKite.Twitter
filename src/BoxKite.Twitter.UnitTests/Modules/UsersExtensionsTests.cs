@@ -1,4 +1,6 @@
-﻿using System.Reactive.Linq;
+﻿using System.Linq;
+using System.Reactive;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using BoxKite.Twitter.Modules;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
