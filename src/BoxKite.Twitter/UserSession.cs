@@ -141,6 +141,7 @@ namespace BoxKite.Twitter
             var signatureBuffer = CryptographicEngine.Sign(macKey, dataToBeSigned);
             var signatureString = CryptographicBuffer.EncodeToBase64String(signatureBuffer);
 #else
+            var signatureString = string.Empty; // TODO
 #endif
             return new OAuth
                        {

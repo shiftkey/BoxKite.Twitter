@@ -96,6 +96,7 @@ namespace BoxKite.Twitter.Authentication
             var signatureBuffer = CryptographicEngine.Sign(macKey, dataToBeSigned);
             var signature = CryptographicBuffer.EncodeToBase64String(signatureBuffer);
 #else
+            var signature = string.Empty; // TODO
 #endif
             var dataToPost = string.Format(
                     "OAuth oauth_callback=\"{0}\", oauth_consumer_key=\"{1}\", oauth_nonce=\"{2}\", oauth_signature_method=\"HMAC-SHA1\", oauth_timestamp=\"{3}\", oauth_version=\"1.0\", oauth_signature=\"{4}\"",
@@ -132,9 +133,11 @@ namespace BoxKite.Twitter.Authentication
             var result = await WebAuthenticationBroker.AuthenticateAsync(WebAuthenticationOptions.None, startUri, endUri);
             if (result.ResponseStatus != WebAuthenticationStatus.Success)
                 return TwitterCredentials.Null;
-#else
-#endif
             return await GetUserCredentials(twitterClientId, twitterClientSecret, result.ResponseData);
+#else
+            return TwitterCredentials.Null; // TODO
+#endif
+
         }
 
         private static async Task<TwitterCredentials> GetUserCredentials(string consumerKey, string consumerSecret, string responseText)
@@ -197,6 +200,7 @@ namespace BoxKite.Twitter.Authentication
             var signatureBuffer = CryptographicEngine.Sign(macKey, dataToBeSigned);
             var signatureString = CryptographicBuffer.EncodeToBase64String(signatureBuffer);
 #else
+            var signatureString = string.Empty; // TODO
 #endif
             var hwr = WebRequest.Create(url);
 
