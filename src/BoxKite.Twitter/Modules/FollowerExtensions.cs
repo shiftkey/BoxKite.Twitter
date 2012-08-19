@@ -6,8 +6,6 @@ using System.Reactive.Linq;
 using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
 using BoxKite.Twitter.Extensions;
-using BoxKite.Twitter.Models.Internal;
-using Newtonsoft.Json;
 
 // ReSharper disable CheckNamespace
 namespace BoxKite.Twitter
@@ -23,28 +21,9 @@ namespace BoxKite.Twitter
                                  };
 
             return session.GetAsync(Api.Resolve("/1/followers/ids.json"), parameters)
-                             .ContinueWith(t => MapToIds(t))
+                             .ContinueWith(t => t.MapToIds())
                              .ToObservable()
                              .SelectMany(c => c);
-        }
-
-        private static IEnumerable<long> MapToIds(Task<HttpResponseMessage> task)
-        {
-            // TODO: how to handle errors properly
-            var result = task.Result;
-
-            if (result.IsSuccessStatusCode)
-            {
-                result.Content
-                    .ReadAsStringAsync()
-                    .ContinueWith(c =>
-                        {
-                            var ids = JsonConvert.DeserializeObject<Ids>(c.Result);
-                            return ids.ids;
-                        });
-            }
-
-            return Enumerable.Empty<long>();
         }
 
         public static IObservable<Models.User> GetFollowers(this IUserSession session, IEnumerable<long> ids)

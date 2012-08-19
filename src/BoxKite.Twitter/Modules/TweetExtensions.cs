@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net.Http;
 using System.Reactive.Threading.Tasks;
-using System.Threading.Tasks;
 using BoxKite.Twitter.Extensions;
-using BoxKite.Twitter.Mappings;
+using BoxKite.Twitter.Models;
 
 // ReSharper disable CheckNamespace
 namespace BoxKite.Twitter
@@ -14,7 +12,7 @@ namespace BoxKite.Twitter
 
     public static class TweetExtensions
     {
-        public static IObservable<Models.Tweet> Tweet(this IUserSession session, string text)
+        public static IObservable<Tweet> Tweet(this IUserSession session, string text)
         {
             var parameters = new SortedDictionary<string, string>
                                  {
@@ -23,24 +21,11 @@ namespace BoxKite.Twitter
                                      { "include_entities", "true" }
                                  };
             return session.PostAsync(Api.Resolve("/1/statuses/update.json"), parameters)
-                          .ContinueWith(c => ProcessSingleResponse(c))
+                          .ContinueWith(c => c.MapToSingleTweet())
                           .ToObservable();
         }
 
-        private static Models.Tweet ProcessSingleResponse(Task<HttpResponseMessage> c)
-        {
-            if (c.IsFaulted || c.IsCanceled)
-                return null;
-
-            var result = c.Result;
-            if (!result.IsSuccessStatusCode)
-                return null;
-
-            var text = result.Content.ReadAsStringAsync().Result;
-            return text.GetSingle();
-        }
-
-        public static IObservable<Models.Tweet> Tweet(this IUserSession session, string text, double latitude, double longitude)
+        public static IObservable<Tweet> Tweet(this IUserSession session, string text, double latitude, double longitude)
         {
             var parameters = new SortedDictionary<string, string>
                                  {
@@ -49,7 +34,7 @@ namespace BoxKite.Twitter
                                      {"long", longitude.ToString()},
                                  };
              return session.PostAsync(Api.Resolve("/1/statuses/update.json"), parameters)
-                           .ContinueWith(c => ProcessSingleResponse(c))
+                           .ContinueWith(c => c.MapToSingleTweet())
                            .ToObservable();
         }
 
@@ -58,11 +43,11 @@ namespace BoxKite.Twitter
             var url = Api.Resolve("/1/statuses/destroy/{0}.json", id);
             var parameters = new SortedDictionary<string, string>();
             return session.PostAsync(url, parameters)
-                          .ContinueWith(c => ProcessBool(c))
+                          .ContinueWith(c => c.MapToBoolean())
                           .ToObservable();
         }
 
-        public static IObservable<Models.Tweet> Reply(this IUserSession session, Models.Tweet tweet, string text)
+        public static IObservable<Tweet> Reply(this IUserSession session, Tweet tweet, string text)
         {
             var parameters = new SortedDictionary<string, string>
                                  {
@@ -70,11 +55,11 @@ namespace BoxKite.Twitter
                                      {"in_reply_to_status_id", tweet.Id}
                                  };
             return session.PostAsync(Api.Resolve("/1/statuses/update.json"), parameters)
-                          .ContinueWith(c => ProcessSingleResponse(c))
+                          .ContinueWith(c => c.MapToSingleTweet())
                           .ToObservable();
         }
 
-        public static IObservable<Models.Tweet> Reply(this IUserSession session, Models.Tweet tweet, string text, double latitude, double longitude)
+        public static IObservable<Tweet> Reply(this IUserSession session, Tweet tweet, string text, double latitude, double longitude)
         {
             var parameters = new SortedDictionary<string, string>
                                  {
@@ -84,32 +69,24 @@ namespace BoxKite.Twitter
                                      {"in_reply_to_status_id", tweet.Id}
                                  };
             return session.PostAsync(Api.Resolve("/1/statuses/update.json"), parameters)
-                          .ContinueWith(c => ProcessSingleResponse(c))
+                          .ContinueWith(c => c.MapToSingleTweet())
                           .ToObservable();
         }
 
-        public static IObservable<Models.Tweet> Retweet(this IUserSession session, Models.Tweet tweet)
+        public static IObservable<Tweet> Retweet(this IUserSession session, Tweet tweet)
         {
             var parameters = new SortedDictionary<string, string>();
             var path = Api.Resolve("/1/statuses/retweet/{0}.json", tweet.Id);
 
             return session.PostAsync(path, parameters)
-                          .ContinueWith(c => ProcessSingleResponse(c))
+                          .ContinueWith(c => c.MapToSingleTweet())
                           .ToObservable();
         }
 
-        public static Models.Tweet UndoRetweet(this IUserSession session, Models.Tweet tweet)
+        public static Tweet UndoRetweet(this IUserSession session, Tweet tweet)
         {
             return null;
         }
 
-        private static bool ProcessBool(Task<HttpResponseMessage> c)
-        {
-            if (c.IsFaulted || c.IsCanceled)
-                return false;
-
-            var result = c.Result;
-            return result.IsSuccessStatusCode;
-        }
     }
 }
