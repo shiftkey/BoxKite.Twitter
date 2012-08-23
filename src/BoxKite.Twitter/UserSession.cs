@@ -58,10 +58,8 @@ namespace BoxKite.Twitter
             return client.PostAsync(url, data);
         }
 
-        public HttpRequestMessage CreateGet(string relativeUrl, SortedDictionary<string, string> parameters)
+        public HttpRequestMessage CreateGet(string url, SortedDictionary<string, string> parameters)
         {
-            var url = "https://userstream.twitter.com/2/" + relativeUrl;
-
             var querystring = parameters.Aggregate("", (current, entry) => current + (entry.Key + "=" + entry.Value + "&"));
             var oauth = BuildAuthenticatedResult(url, parameters, "GET");
             var fullUrl = url;
