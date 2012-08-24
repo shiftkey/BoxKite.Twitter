@@ -139,12 +139,10 @@ namespace BoxKite.Twitter
             var signatureBuffer = CryptographicEngine.Sign(macKey, dataToBeSigned);
             var signatureString = CryptographicBuffer.EncodeToBase64String(signatureBuffer);
 #else
-            var encodedconsumerSecret = UrlEncodeRelaxed(credentials.ConsumerSecret);
-            var encodedtokenSecret = UrlEncodeRelaxed(credentials.TokenSecret);
-            var _encoding = Encoding.UTF8;
+            var encoding = Encoding.UTF8;
             var crypto = new HMACSHA1
             {
-                Key = _encoding.GetBytes(signingKey)
+                Key = encoding.GetBytes(signingKey)
             };
             var data = Encoding.UTF8.GetBytes(baseString);
             var hash = crypto.ComputeHash(data);
@@ -169,28 +167,6 @@ namespace BoxKite.Twitter
                                         Uri.EscapeDataString(signatureString),
                                         Uri.EscapeDataString(OauthVersion))
                        };
-        }
-
-        private static readonly string[] UriRfc3986CharsToEscape = new[] { "!", "*", "'", "(", ")" };
-
-        private static readonly string[] UriRfc3968EscapedHex = new[] { "%21", "%2A", "%27", "%28", "%29" };
-        public static string UrlEncodeRelaxed(string value)
-        {
-            // Start with RFC 2396 escaping by calling the .NET method to do the work.
-            // This MAY sometimes exhibit RFC 3986 behavior (according to the documentation).
-            // If it does, the escaping we do that follows it will be a no-op since the
-            // characters we search for to replace can't possibly exist in the string.
-            StringBuilder escaped = new StringBuilder(Uri.EscapeDataString(value));
-
-            // Upgrade the escaping to RFC 3986, if necessary.
-            for (int i = 0; i < UriRfc3986CharsToEscape.Length; i++)
-            {
-                string t = UriRfc3986CharsToEscape[i];
-                escaped.Replace(t, UriRfc3968EscapedHex[i]);
-            }
-
-            // Return the fully-RFC3986-escaped string.
-            return escaped.ToString();
         }
 
         private struct OAuth
