@@ -105,6 +105,9 @@
     <Compile Include="..\BoxKite.Twitter\Models\DirectMessage.cs">
       <Link>Models\DirectMessage.cs</Link>
     </Compile>
+    <Compile Include="..\BoxKite.Twitter\Models\Event.cs">
+      <Link>Models\Event.cs</Link>
+    </Compile>
     <Compile Include="..\BoxKite.Twitter\Models\Hashtag.cs">
       <Link>Models\Hashtag.cs</Link>
     </Compile>

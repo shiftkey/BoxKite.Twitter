@@ -122,6 +122,7 @@
     <Compile Include="Mappings\TwitterMappings.cs" />
     <Compile Include="Models\DiffEngine.cs" />
     <Compile Include="Models\DirectMessage.cs" />
+    <Compile Include="Models\Event.cs" />
     <Compile Include="Models\Hashtag.cs" />
     <Compile Include="Models\Internal\Attributes.cs" />
     <Compile Include="Models\Internal\BoundingBox.cs" />
