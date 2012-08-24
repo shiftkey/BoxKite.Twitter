@@ -123,7 +123,7 @@ namespace BoxKite.Twitter
                     var target = (JToken) obj["target"];
                     var source = (JToken) obj["source"];
                     var target_object = (JToken) obj["target_object"];
-                    var created_at = (JValue) obj["target_object"];
+                    var created_at = (JToken) obj["target_object"];
                     var created_atText = eventValue.Value<string>();
                     var timestamp = created_atText.ToDateTimeOffset();
 
