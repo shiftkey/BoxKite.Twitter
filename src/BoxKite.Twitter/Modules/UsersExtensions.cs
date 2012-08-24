@@ -48,5 +48,17 @@ namespace BoxKite.Twitter
                           .ContinueWith(c => c.MapToSingleUser())
                           .ToObservable();
         }
+
+        public static IObservable<User> GetVerifyCredentials(this IUserSession session)
+        {
+            var parameters = new SortedDictionary<string, string>
+                                 {
+                                     {"include_entities", "true"},
+                                 };
+            var url = Api.Resolve("/1/account/verify_credentials.json");
+            return session.GetAsync(url, parameters)
+                          .ContinueWith(c => c.MapToSingleUser())
+                          .ToObservable();
+        }
     }
 }
