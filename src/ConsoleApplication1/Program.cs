@@ -15,22 +15,20 @@ namespace ConsoleApplication1
         static void Main(string[] args)
         {
             Console.WriteLine("OHAI");
-            Task<TwitterCredentials> tcaw = SignIn("b8qsK6pFUPNZzdu5FxfxVg", "mYO5CysNHvFQ0pPO7y7Fwj7LY1KsLlxha794FXp7qM" );
-            TwitterCredentials tc = tcaw.Result;
-            UserSession us = GetSession(tc);
-            Console.ReadLine();
 
+            var ta = new TwitterAuthenticator("b8qsK6pFUPNZzdu5FxfxVg", "mYO5CysNHvFQ0pPO7y7Fwj7LY1KsLlxha794FXp7qM");
+            ;
+            if (ta.AuthenticateUser().Result)
+            {
+                Console.Write("Enter PIN as shown in the browser window after Authorizing BoxKite: ");
+                var pin = Console.ReadLine();
+                if (ta.DelegateAuthentication(pin).Result)
+                {
+                    TwitterCredentials tc = ta.GetUserCredentials();
+                    Console.WriteLine(tc.ScreenName + " is authorised to use BoxKite.Twitter. Yay");
+                }
+                Console.ReadLine();
+            }
         }
-
-        public static async Task<TwitterCredentials> SignIn(string clientKey, string clientSecret)
-        {
-            return await TwitterAuthenticator.AuthenticateUser(clientKey, clientSecret, "oob");
-         }
-
-        public static UserSession GetSession(TwitterCredentials credentials)
-        {
-            return new UserSession(credentials);
-        }
-
     }
 }
