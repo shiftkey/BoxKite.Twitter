@@ -22,7 +22,7 @@ namespace ConsoleApplication1
         {
             Console.WriteLine("OHAI");
 
-            var ta = new TwitterAuthenticator("b8qsK6pFUPNZzdu5FxfxVg", "mYO5CysNHvFQ0pPO7y7Fwj7LY1KsLlxha794FXp7qM");
+            var ta = new TwitterAuthenticator("xxx", "xxx");
             ta.AuthenticateUser();
             Console.Write("pin: ");
             var pin = Console.ReadLine();
