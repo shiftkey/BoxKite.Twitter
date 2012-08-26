@@ -29,6 +29,15 @@ namespace BoxKite.Twitter.Authentication
             this.clientSecret = clientSecret;
         }
 
+        public TwitterAuthenticator(string clientID, string clientSecret, string accessToken, string accessTokenSecret)
+        {
+            this.clientID = clientID;
+            this.clientSecret = clientSecret;
+            this.accessToken = accessToken;
+            this.accessTokenSecret = accessTokenSecret;
+        }
+
+
         public async Task<bool> AuthenticateUser()
         {
             if (string.IsNullOrWhiteSpace(clientID))

@@ -229,7 +229,6 @@
     <Compile Include="..\BoxKite.Twitter\UserStream.cs">
       <Link>UserStream.cs</Link>
     </Compile>
-    <Compile Include="Authentication\OAuthBase.cs" />
     <Compile Include="Authentication\TwitterAuthenticator.cs" />
     <Compile Include="Models\PropertyChangedBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
