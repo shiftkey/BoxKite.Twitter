@@ -15,6 +15,8 @@ Its up on NuGet as a Pre-Release package:
 
 You need an application token and key from Twitter before you can get started. Ensuring you have the right permissions is out of scope of this topic (report an issue if you want me to document this).
 
+### Authentication
+
 Once you have those, have a look at authenticating the user (this currently leverages the WebAuthenticationBroker components in Windows 8):
 
 	public async Task SignInAndGetProfile(string clientKey, string clientSecret) 
@@ -31,6 +33,23 @@ Once you have those, have a look at authenticating the user (this currently leve
 	    var profile = await session.GetProfile(credentials.ScreenName);
 	}
 
+On the desktop it's a bit different (we need to open a browser and the user needs to add the PIN back into the app) but the code itself is still relatively simple:
+
+    var authenticator = new TwitterAuthenticator("clientId", "clientSecret");
+    bool flowStarted = await authenticator.StartAuthenticatorFlow();
+    if (!flowStarted) UserCancelled();
+    string pin = // get PIN from user
+    bool isTokenValid = await authenticator.ValidateInput(pin);
+    if (isTokenValid)
+	{
+        var tc = authenticator.GetUserCredentials();
+        Console.WriteLine(tc.ScreenName + " is authorised to use BoxKite.Twitter. Yay");
+
+        var session = new UserSession(tc);
+        var profile = await session.GetProfile(credentials.ScreenName);
+    }
+            
+**NOTE:** This feature is being discussed in a pull request and is not currently available.
 
 ### Reactive Extensions All The Things
 
