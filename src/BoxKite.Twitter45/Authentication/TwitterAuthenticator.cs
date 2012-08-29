@@ -17,7 +17,6 @@ namespace BoxKite.Twitter.Authentication
         private readonly string clientID = ""; // twitter API calls these Consumers, or from their perspective consumers of their API
         private readonly string clientSecret = ""; // twitter API calls these Consumers, or from their perspective consumers of their API
         private string oAuthToken = "";
-        private string OAuthTokenSecret = "";
         private string accessToken = "";
         private string accessTokenSecret = "";
         private string userID = "";
@@ -28,15 +27,6 @@ namespace BoxKite.Twitter.Authentication
             this.clientID = clientID;
             this.clientSecret = clientSecret;
         }
-
-        public TwitterAuthenticator(string clientID, string clientSecret, string accessToken, string accessTokenSecret)
-        {
-            this.clientID = clientID;
-            this.clientSecret = clientSecret;
-            this.accessToken = accessToken;
-            this.accessTokenSecret = accessTokenSecret;
-        }
-
 
         public async Task<bool> StartAuthentication()
         {
@@ -80,7 +70,7 @@ namespace BoxKite.Twitter.Authentication
                         oAuthToken = splits[1];
                         break;
                     case "oauth_token_secret":
-                        OAuthTokenSecret = splits[1];
+                        var OAuthTokenSecret = splits[1];
                         break;
                     case "oauth_callback_confirmed":
                         if (splits[1].ToLower() == "true") oauthCallbackConfirmed = true;
