@@ -17,7 +17,7 @@ namespace ConsoleApplication1
             Console.Write("pin: ");
             var pin = Console.ReadLine();
             var twittercredentials = twitterauth.ConfirmPin(pin).Result;
-            if (twittercredentials != null)
+            if (twittercredentials.Valid)
             {
                 Console.WriteLine(twittercredentials.ScreenName + " is authorised to use BoxKite.Twitter. Yay");
 

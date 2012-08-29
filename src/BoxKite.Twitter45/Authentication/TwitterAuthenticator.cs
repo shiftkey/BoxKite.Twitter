@@ -113,7 +113,7 @@ namespace BoxKite.Twitter.Authentication
             var response = await PostData(AuthorizeTokenUrl, dataToPost);
 
             if (string.IsNullOrWhiteSpace(response))
-                return null;
+                return TwitterCredentials.Null; //oops something wrong here
 
             var useraccessConfirmed = false;
 
@@ -136,7 +136,7 @@ namespace BoxKite.Twitter.Authentication
                         break;
                 }
             }
-            return useraccessConfirmed ? GetUserCredentials() : null;
+            return useraccessConfirmed ? GetUserCredentials() : TwitterCredentials.Null;
         }
 
         /* Utilities */
