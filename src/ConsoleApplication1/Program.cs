@@ -1,17 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BoxKite.Modules;
+﻿using BoxKite.Modules;
 using BoxKite.Twitter;
 using BoxKite.Twitter.Authentication;
-using BoxKite.Twitter.Models;
-using BoxKite.Twitter.Extensions;
-using BoxKite.Twitter.Modules;
-using BoxKite.Twitter.Mappings;
-using BoxKite.Twitter.Modules.Streaming;
-using System.Reactive;
+using System;
 
 namespace ConsoleApplication1
 {
@@ -22,16 +12,16 @@ namespace ConsoleApplication1
         {
             Console.WriteLine("OHAI");
 
-            var ta = new TwitterAuthenticator("xxx", "xxx");
-            ta.AuthenticateUser();
+            var twitterauth = new TwitterAuthenticator("xxx", "xxx");
+            twitterauth.StartAuthentication();
             Console.Write("pin: ");
             var pin = Console.ReadLine();
-            if (ta.DelegateAuthentication(pin).Result)
+            var twittercredentials = twitterauth.ConfirmPin(pin).Result;
+            if (twittercredentials != null)
             {
-                TwitterCredentials tc = ta.GetUserCredentials();
-                Console.WriteLine(tc.ScreenName + " is authorised to use BoxKite.Twitter. Yay");
+                Console.WriteLine(twittercredentials.ScreenName + " is authorised to use BoxKite.Twitter. Yay");
 
-                var session = new UserSession(tc);
+                var session = new UserSession(twittercredentials);
                 var stream = session.GetUserStream();
                 stream.Tweets.Subscribe(t => Console.WriteLine("{0}: {1}", t.User.ScreenName, t.Text));
                 stream.Start();

@@ -38,7 +38,7 @@ namespace BoxKite.Twitter.Authentication
         }
 
 
-        public async Task<bool> AuthenticateUser()
+        public async Task<bool> StartAuthentication()
         {
             if (string.IsNullOrWhiteSpace(clientID))
                 throw new ArgumentException("ClientID must be specified", clientID);
@@ -94,23 +94,7 @@ namespace BoxKite.Twitter.Authentication
             return oauthCallbackConfirmed;
         }
 
-        public TwitterCredentials GetUserCredentials()
-        {
-            var credentials = new TwitterCredentials
-                                  {
-                                      ConsumerKey = clientID,
-                                      ConsumerSecret = clientSecret,
-                                      Token = accessToken,
-                                      TokenSecret = accessTokenSecret,
-                                      ScreenName = screenName,
-                                      UserID = userID,
-                                      Valid = true
-                                  };
-
-            return credentials;
-        }
-
-        public async Task<bool> DelegateAuthentication(string pinAuthorizationCode)
+        public async Task<TwitterCredentials> ConfirmPin(string pinAuthorizationCode)
         {
             if (string.IsNullOrWhiteSpace(pinAuthorizationCode))
                 throw new ArgumentException("pinAuthorizationCode must be specified", pinAuthorizationCode);
@@ -129,7 +113,7 @@ namespace BoxKite.Twitter.Authentication
             var response = await PostData(AuthorizeTokenUrl, dataToPost);
 
             if (string.IsNullOrWhiteSpace(response))
-                return false;
+                return null;
 
             var useraccessConfirmed = false;
 
@@ -152,8 +136,7 @@ namespace BoxKite.Twitter.Authentication
                         break;
                 }
             }
-
-            return useraccessConfirmed;
+            return useraccessConfirmed ? GetUserCredentials() : null;
         }
 
         /* Utilities */
@@ -161,6 +144,24 @@ namespace BoxKite.Twitter.Authentication
         const string RequestTokenUrl = "http://api.twitter.com/oauth/request_token";
         const string AuthenticateUrl = "https://api.twitter.com/oauth/authorize?oauth_token=";
         const string AuthorizeTokenUrl = "https://api.twitter.com/oauth/access_token";
+
+
+        private TwitterCredentials GetUserCredentials()
+        {
+            var credentials = new TwitterCredentials
+            {
+                ConsumerKey = clientID,
+                ConsumerSecret = clientSecret,
+                Token = accessToken,
+                TokenSecret = accessTokenSecret,
+                ScreenName = screenName,
+                UserID = userID,
+                Valid = true
+            };
+
+            return credentials;
+        }
+
 
         private static string GenerateSignature(string signingKey, string baseString, string tokenSecret)
         {
