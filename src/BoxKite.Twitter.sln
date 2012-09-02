@@ -17,6 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "package", "package", "{7B80
 		..\build\BoxKite.Twitter\BoxKite.Twitter.nuspec = ..\build\BoxKite.Twitter\BoxKite.Twitter.nuspec
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoxKite.Twitter45.Samples", "BoxKite.Twitter45.Samples\BoxKite.Twitter45.Samples.csproj", "{C5994B7F-CFA5-490A-BFC5-34148FD9A153}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -79,6 +81,16 @@ Global
 		{09468A00-71F5-4406-A4C4-A6C7E491258F}.Release|ARM.ActiveCfg = Release|Any CPU
 		{09468A00-71F5-4406-A4C4-A6C7E491258F}.Release|x64.ActiveCfg = Release|Any CPU
 		{09468A00-71F5-4406-A4C4-A6C7E491258F}.Release|x86.ActiveCfg = Release|Any CPU
+		{C5994B7F-CFA5-490A-BFC5-34148FD9A153}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5994B7F-CFA5-490A-BFC5-34148FD9A153}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5994B7F-CFA5-490A-BFC5-34148FD9A153}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{C5994B7F-CFA5-490A-BFC5-34148FD9A153}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C5994B7F-CFA5-490A-BFC5-34148FD9A153}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C5994B7F-CFA5-490A-BFC5-34148FD9A153}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5994B7F-CFA5-490A-BFC5-34148FD9A153}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5994B7F-CFA5-490A-BFC5-34148FD9A153}.Release|ARM.ActiveCfg = Release|Any CPU
+		{C5994B7F-CFA5-490A-BFC5-34148FD9A153}.Release|x64.ActiveCfg = Release|Any CPU
+		{C5994B7F-CFA5-490A-BFC5-34148FD9A153}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
