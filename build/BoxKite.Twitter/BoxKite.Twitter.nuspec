@@ -4,14 +4,14 @@
     <id>BoxKite.Twitter</id>
     <version>{version}</version>
     <title>BoxKite.Twitter</title>
-    <authors>Brendan Forster</authors>
+    <authors>Brendan Forster, Paul Jenkins, Nick Hodge</authors>
     <owners>Brendan Forster</owners>
     <projectUrl>http://github.com/shiftkey/BoxKite.Twitter/</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>A Rx-based library for interacting with the Twitter API on Windows 8</description>
-    <releaseNotes>Started work on .NET 4.5 version for desktop apps</releaseNotes>
+    <description>A Rx-based library for interacting with the Twitter API on Metro and .NET 4.5</description>
+    <releaseNotes>Integrated authentication for desktop mode</releaseNotes>
     <copyright>Copyright 2012</copyright>
-    <tags>WinRT Twitter BoxKite</tags>
+    <tags>WinRT Twitter BoxKite NET45</tags>
     <dependencies>
     <dependency id="Newtonsoft.Json" version="4.5.7" />
     <dependency id="Rx-Core" version="2.0.20814" />

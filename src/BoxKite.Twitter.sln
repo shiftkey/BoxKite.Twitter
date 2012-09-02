@@ -12,7 +12,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{92C99A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoxKite.Twitter45", "BoxKite.Twitter45\BoxKite.Twitter45.csproj", "{09468A00-71F5-4406-A4C4-A6C7E491258F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoxKite.Twitter45.Samples", "ConsoleApplication1\BoxKite.Twitter45.Samples.csproj", "{C5994B7F-CFA5-490A-BFC5-34148FD9A153}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApplication1", "ConsoleApplication1\ConsoleApplication1.csproj", "{C5994B7F-CFA5-490A-BFC5-34148FD9A153}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "package", "package", "{7B805718-C3ED-49B7-B730-F03A69C31BD9}"
+	ProjectSection(SolutionItems) = preProject
+		..\build\BoxKite.Twitter\BoxKite.Twitter.nuspec = ..\build\BoxKite.Twitter\BoxKite.Twitter.nuspec
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
