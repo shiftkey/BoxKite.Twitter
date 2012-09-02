@@ -53,6 +53,7 @@
       <HintPath>..\packages\Rx-PlatformServices.2.0.20814\lib\Net45\System.Reactive.PlatformServices.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -62,9 +63,6 @@
   <ItemGroup>
     <Compile Include="..\BoxKite.Twitter\AnonymousSession.cs">
       <Link>AnonymousSession.cs</Link>
-    </Compile>
-    <Compile Include="..\BoxKite.Twitter\Authentication\TwitterAuthenticator.cs">
-      <Link>Authentication\TwitterAuthenticator.cs</Link>
     </Compile>
     <Compile Include="..\BoxKite.Twitter\Extensions\Api.cs">
       <Link>Extensions\Api.cs</Link>
@@ -231,7 +229,7 @@
     <Compile Include="..\BoxKite.Twitter\UserStream.cs">
       <Link>UserStream.cs</Link>
     </Compile>
-    <Compile Include="Authentication\OAuthBase.cs" />
+    <Compile Include="Authentication\TwitterAuthenticator.cs" />
     <Compile Include="Models\PropertyChangedBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
