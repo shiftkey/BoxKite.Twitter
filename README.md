@@ -1,7 +1,4 @@
-BoxKite.Twitter
-===============
-
-## Ignore This Repo
+# Ignore This Repo
 
 So @NickHodge picked up this code in my absence and has turned it into a PCL project. 
 
